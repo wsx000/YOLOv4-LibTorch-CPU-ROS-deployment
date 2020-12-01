@@ -47,26 +47,17 @@ int main(int argc, char **argv)
     ros::Publisher boxes_pub = n.advertise<yolo4::box>("boxes", 3);
 
     // 设置循环的频率  25帧
-    ros::Rate loop_rate(25);
-
-    const char* imgPath = "/home/wsx/code/YOLOv4/y4-libtorch-V1-20201120/62.jpg";
+    // ros::Rate loop_rate(25);
 
     while (ros::ok())
     {
         yolo4::box msg;
-        // // 读取摄像头
-        // cap >> frame;
+        // 读取摄像头
+        cap >> frame;
         // cv::imshow("a", frame);
         // cv::waitKey(1);
 
-        // 读取图片
-        cv::Mat image = cv::imread(imgPath);
-        // 前向传播并推理，输出结果为：n * (ymin, xmin, ymax, xmax, conf, class) 的数组
-        vector<vector<float>> out_boxes = yolo.detect_image(image);
-        // yolo.draw_rectangle(out_boxes, image);
-
-
-        // std::vector<vector<float>> out_boxes = yolo.detect_image(frame);
+        std::vector<vector<float>> out_boxes = yolo.detect_image(frame);
         // 1维目标消息数组
         std::vector<float> out;
         for(int i=0; i<out_boxes.size(); i++)
@@ -78,35 +69,13 @@ int main(int argc, char **argv)
         }
         // 发布话题
         msg.boxes_num = out_boxes.size();
-
-        std::cout << out_boxes.size() << std::endl;
-
         msg.boxes = out;
         boxes_pub.publish(msg);
         // 画框框
-        yolo.draw_rectangle(out_boxes, image);
-
-
-
-
+        yolo.draw_rectangle(out_boxes, frame);
     }
     cap.release();
     cv::destroyAllWindows();
-
-
-
-
-
-
-
-    
-    // while (ros::ok())
-    // {
-    //     // 初始化 消息类型
-    //     yolo4::box boxes;
-        
-        
-    // }
     
 }
 
