@@ -8,3 +8,5 @@ opencv-contrib-3.4.10
 torchvision-0.6.0 
 LibTorch1.5.0-CPU
 ROS-Melodic
+  
+this code is based on CPU，and you can refer the version based on GPU at https://github.com/wsx000/YOLO4-ROS-GPU
